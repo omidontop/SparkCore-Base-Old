@@ -1,6 +1,12 @@
-/*----------------------------------------------------------------------------
- * CMSIS-RTOS 'main' function template
- *---------------------------------------------------------------------------*/
+/*******************************************************************************
+** Name: main.c
+** Description: CMSIS-RTOS 'main' function file.
+**
+********************************************************************************
+**
+**	Copyright (C) 2015 by Omid Manikhi.
+**
+*******************************************************************************/
 
 #define osObjectsPublic                     // define objects in main module
 #include "osObjects.h"                      // RTOS object definitions
@@ -11,14 +17,25 @@
 
 int main (void) {
 	
-	osKernelInitialize ();                    // initialize CMSIS-RTOS
+	/*
+	** Initialize CMSIS-RTOS.
+	*/
 
-	// initialize peripherals here
-	
-	// create 'thread' functions that start executing,
-	// example: tid_name = osThreadCreate (osThread(name), NULL);
+	osKernelInitialize ();
 
-	osKernelStart ();                         // start thread execution 
+	/*
+	** TODO: Initialize the peripherals and threads here.
+	**
+	** create 'thread' functions that start executing,
+	** example: tid_name = osThreadCreate (osThread(name), NULL);
+	*/
+
+
+	/*
+	** Start the thread execution.
+	*/
+
+	osKernelStart ();
 
 	while( 1 );
 

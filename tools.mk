@@ -1,5 +1,5 @@
 ################################################################################
-# File Name: 	tools.mk
+# Name: tools.mk
 ################################################################################
 # Desription: 	The definition of platform-dependant tools used in the other 
 # 				makefiles. 
