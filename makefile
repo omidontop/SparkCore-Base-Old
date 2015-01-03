@@ -185,6 +185,7 @@ $(BUILD_DIR)%.o : $(SRC_DIR)%.s
 	@echo Assembling $(notdir $<)...
 	@$(CC) $(ASFLAGS) -c -o $@ $<
 
+
 .PHONY: all clean elf bin hex size
 
 .SECONDARY:
