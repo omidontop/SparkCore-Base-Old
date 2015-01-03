@@ -36,7 +36,8 @@ PROJECT_DIR := $(SELF_DIR)
 # object files will be placed.
 # Note: Currently set to <project>/build/obj directory and set relative to
 # the dir which makefile is invoked.
-BUILD_DIR = $(SELF_DIR)build/obj
+BUILD_DIR = $(SELF_DIR)build
+OBJ_DIR = $(BUILD_DIR)/obj
 
 # Path to the root of source files, in this case root of the project to
 # include ../src and ../lib dirs.
@@ -112,20 +113,20 @@ ASFLAGS =  -g3 -gdwarf-2 -mcpu=cortex-m3 -mthumb
 ASFLAGS += -x assembler-with-cpp -fmessage-length=0
 
 # Collect all object and dep files
-ALLOBJ += $(addprefix $(BUILD_DIR), $(CSRC:.c=.o))
-ALLOBJ += $(addprefix $(BUILD_DIR), $(CPPSRC:.cpp=.o))
-ALLOBJ += $(addprefix $(BUILD_DIR), $(ASRC:.s=.o))
+ALLOBJ += $(addprefix $(OBJ_DIR), $(CSRC:.c=.o))
+ALLOBJ += $(addprefix $(OBJ_DIR), $(CPPSRC:.cpp=.o))
+ALLOBJ += $(addprefix $(OBJ_DIR), $(ASRC:.s=.o))
 
-ALLDEPS += $(addprefix $(BUILD_DIR), $(CSRC:.c=.o.d))
-ALLDEPS += $(addprefix $(BUILD_DIR), $(CPPSRC:.cpp=.o.d))
-ALLDEPS += $(addprefix $(BUILD_DIR), $(ASRC:.s=.o.d))
+ALLDEPS += $(addprefix $(OBJ_DIR), $(CSRC:.c=.o.d))
+ALLDEPS += $(addprefix $(OBJ_DIR), $(CPPSRC:.cpp=.o.d))
+ALLDEPS += $(addprefix $(OBJ_DIR), $(ASRC:.s=.o.d))
 
 
 ################################################################################
 # Targets
 ################################################################################
 
-all: elf hex bin size
+all: elf hex bin pdmacros size
 
 elf: $(TARGETDIR)$(TARGET).elf
 
@@ -138,6 +139,10 @@ size:
 	@$(SIZE) $(TARGETDIR)$(TARGET).elf \
 	 		 $(TARGETDIR)$(TARGET).hex \
 	 		 --format=berkeley -d $<
+
+pdmacros:
+	@echo Saving PreDefMacros.txt...
+	@echo | $(CC) $(CFLAGS) -dM -E - > $(BUILD_DIR)/PreDefMacros.txt
 
 # Create a hex file from ELF file
 %.hex : %.elf
@@ -157,33 +162,33 @@ $(TARGETDIR)$(TARGET).elf : $(ALLOBJ)
 clean:
 	@echo Cleaning...
 	@-$(RMDIR) $(call fixdir,$(TARGETDIR))
-	@-$(RMDIR) $(call fixdir,$(BUILD_DIR))
+	@-$(RMDIR) $(call fixdir,$(OBJ_DIR))
 	@-$(MKDIR) $(call fixdir,$(TARGETDIR))
-	@-$(MKDIR) $(call fixdir,$(addprefix $(BUILD_DIR)/, $(SRC_DIRS)))
+	@-$(MKDIR) $(call fixdir,$(addprefix $(OBJ_DIR)/, $(SRC_DIRS)))
 
 
 ################################################################################
 # Tool Invocations
 ################################################################################
 
-# C compiler to build .o from .c in $(BUILD_DIR)
-$(BUILD_DIR)%.o : $(SRC_DIR)%.c
+# C compiler to build .o from .c in $(OBJ_DIR)
+$(OBJ_DIR)%.o : $(SRC_DIR)%.c
 	@echo Compiling $(notdir $<)...
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-# CPP compiler to build .o from .cpp in $(BUILD_DIR)
+# CPP compiler to build .o from .cpp in $(OBJ_DIR)
 # Note: Calls standard $(CC) - gcc will invoke g++ if appropriate
-$(BUILD_DIR)%.o : $(SRC_DIR)%.cpp
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
 	@echo Compiling $(notdir $<)...
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-# Assember to build .o from .s in $(BUILD_DIR)
-$(BUILD_DIR)%.o : $(SRC_DIR)%.s
+# Assember to build .o from .s in $(OBJ_DIR)
+$(OBJ_DIR)%.o : $(SRC_DIR)%.s
 	@echo Assembling $(notdir $<)...
 	@$(CC) $(ASFLAGS) -c -o $@ $<
 
 
-.PHONY: all clean elf bin hex size
+.PHONY: all clean elf bin hex size pdmacros
 
 .SECONDARY:
 
