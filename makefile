@@ -12,9 +12,6 @@
 # Functions
 ################################################################################
 
-# return the directory of the specified file replacing slashes with backslashes.
-windir = $(subst /,\,$(dir $1))
-
 # Recursive wildcard function
 rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
@@ -159,10 +156,10 @@ $(TARGETDIR)$(TARGET).elf : $(ALLOBJ)
 
 clean:
 	@echo Cleaning...
-	@-$(RMDIR) $(call windir,$(TARGETDIR))
-	@-$(RMDIR) $(call windir,$(BUILD_DIR))
-	@-$(MKDIR) $(call windir,$(TARGETDIR))
-	@-$(MKDIR) $(call windir,$(addprefix $(BUILD_DIR)/, $(SRC_DIRS)))
+	@-$(RMDIR) $(call fixdir,$(TARGETDIR))
+	@-$(RMDIR) $(call fixdir,$(BUILD_DIR))
+	@-$(MKDIR) $(call fixdir,$(TARGETDIR))
+	@-$(MKDIR) $(call fixdir,$(addprefix $(BUILD_DIR)/, $(SRC_DIRS)))
 
 
 ################################################################################

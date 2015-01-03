@@ -38,6 +38,10 @@ ifeq ($(OS),Windows_NT)
     RM := del /q /f
     RMDIR := rd /s /q
     MKDIR := mkdir
+	
+	# return the directory of the specified file replacing slashes with 
+	# backslashes.
+	fixdir = $(subst /,\,$(dir $1))
 
     # CCFLAGS += -D WIN32
     ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -52,6 +56,10 @@ else
     RMDIR := rm -f -r
     MKDIR := mkdir -p
 	
+	# return the directory of the specified file. This really only makes sense
+	# for Windows and is here for compatibility reasons with other platforms.
+	fixdir = $(dir $1)
+
 	# Find the exact kernel type.
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
