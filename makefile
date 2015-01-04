@@ -142,7 +142,8 @@ size:
 
 pdmacros:
 	@echo Saving PreDefMacros.txt...
-	@echo | $(CC) $(CFLAGS) -dM -E - > $(BUILD_DIR)/PreDefMacros.txt
+	@echo | $(patsubst $@.d,$(OBJ_DIR)/$@.d,$(CC) $(CFLAGS)) \
+			-dM -E - > $(BUILD_DIR)/PreDefMacros.txt
 
 # Create a hex file from ELF file
 %.hex : %.elf
