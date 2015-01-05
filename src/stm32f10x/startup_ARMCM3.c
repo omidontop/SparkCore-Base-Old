@@ -32,7 +32,7 @@
    POSSIBILITY OF SUCH DAMAGE.
    ---------------------------------------------------------------------------*/
 
-#include "config.h"
+#include "config.h"			/* Main configuration header file.				  */
 #include <stdint.h>
 
 /*----------------------------------------------------------------------------
