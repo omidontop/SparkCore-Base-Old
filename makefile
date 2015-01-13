@@ -94,7 +94,7 @@ CFLAGS += -Werror=deprecated-declarations
 CFLAGS += -MD -MP -MF $@.d
 
 # Target specific defines
-# CFLAGS += -DUSE_STDPERIPH_DRIVER
+CFLAGS += -DUSE_STDPERIPH_DRIVER
 CFLAGS += -DSTM32F10X_MD
 CFLAGS += -D__CORTEX_M3
 CFLAGS += -D__CMSIS_RTOS
